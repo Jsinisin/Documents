@@ -1,0 +1,1 @@
+sudo modprobe zram && sudo bash -c 'echo "zstd" > /sys/block/zram0/comp_algorithm' && sudo bash -c 'echo "8G" > /sys/block/zram0/disksize' && sudo mkswap --label zram0 /dev/zram0 && sudo swapon --priority 100 /dev/zram0

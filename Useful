@@ -1,0 +1,5 @@
+sudo chown root ~/.config//Code/User/workspaceStorage # Make VSCode not save open windows
+
+xdg-settings set default-web-browser librewolf.desktop # Make Librewolf Default Browser
+
+Developer: Generate Color Theme From Current Settings # Generate Colors of VSCode Theme

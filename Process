@@ -1,0 +1,214 @@
+mkfs.vfat -F 32 /dev/nvme0n1p1
+mkfs.btrfs /dev/nvme0n1p2
+
+mount -o noatime,compress=zstd,space_cache=v2 /dev/nvme0n1p2 /mnt
+
+btrfs su cr /mnt/@, snapshots
+
+umount /mnt
+
+mount -o noatime,compress=zstd,space_cache=v2,subvol=@ /dev/nvme0n1p2 /mnt
+mkdir -p /mnt/{boot,home,.snapshots}
+mount -o noatime,compress=zstd,space_cache=v2,subvol=@snapshots /dev/nvme0n1p2 /mnt/.snapshots
+mount /dev/nvme0n1p1 /mnt/boot
+
+PACSTRAP:
+amd-ucode
+
+base
+base-devel
+linux
+linux-firmware
+vim
+sudo
+
+genfstab -U /mnt >> /mnt/etc/fstab
+
+
+--------------------
+arch-chroot /mnt
+
+passwd
+useradd -mG wheel human
+passwd human
+
+EDITOR=vim visudo
+
+ln -sf /usr/share/zoneinfo/America/Regina /etc/localtime
+hwclock --systohc
+
+vim /etc/locale.gen
+
+locale-gen
+
+vim /etc/locale.conf - LANG=en_CA.UTF-8
+
+vim /etc/hostname
+[comp name here]
+
+vim /etc/hosts
+127.0.0.1    localhost
+::1          localhost
+127.0.1.1    [comp name here].localdomain    [comp name here]
+
+Install:
+blueman
+efibootmgr
+git
+grub
+fastfetch
+networkmanager
+network-manager-applet
+otf-font-awesome
+snapper
+terminus-font
+tlp
+tlp-rdw
+ttf-font-awesome
+ttf-hack
+unzip
+wget
+zsh
+
+vim /etc/vconsole.conf
+addline - FONT=ter-120b
+
+vim /etc/mkinitcpio.conf
+MODULES=(zram)
+
+mkinitcpio -p linux
+
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+
+grub-mkconfig -o /boot/grub/grub.cfg
+
+systemctl enable bluetooth
+systemctl enable NetworkManager
+systemctl enable NetworkManager-dispatcher.service
+systemctl mask systemd-rfkill.service systemd-rfkill.socket
+systemctl enable tlp.service
+
+exit
+
+umount -lR /mnt
+
+sudo shutdown now
+
+
+--------------------
+sudo nmcli device wifi connect [wifi ssid] password [wifi password]
+
+git clone https://github.com/jsinisin/bin
+
+zram.sh
+
+sudo vim /etc/modules-load.d/zram.conf
+options zram num_devices=1
+
+sudo vim /etc/udev/rules.d/99-zram.rules
+ACTION=="add", KERNEL=="zram0", ATTR{comp_algorithm}="zstd", ATTR{disksize}="8G", RUN="/usr/bin/mkswap -U clear /dev/%k", TAG+="systemd"
+
+sudo vim /etc/fstab
+/dev/zram0 none swap defaults,pri=100 0 0
+
+sudo mv /home/human/bin/.zshrc /home/bin/
+sudo mkdir .config
+sudo chown -R human:human /home/human/
+sudo mv /home/human/bin/.config/fastfetch /home/human/.config/
+
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting
+
+chsh
+
+sudo mkinitcpio -p linux
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+sudo reboot now
+
+--------------------
+BTRFS/Snapper Config
+--------------------
+
+btrfs.sh
+
+sudo vim /etc/snapper/configs/root
+Add user
+min age - 1800
+4 hourly
+7 daily
+0 rest
+
+btrfs property set -ts [/path/to/snapshot] ro false
+
+sudo systemctl enable snapper-timeline.timer
+sudo systemctl enable snapper-cleanup.timer
+
+timedatectl set-ntp true
+timedatectl set-timezone America/Regina
+
+https://aur.archlinux.org/paru-git.git
+
+cd paru/
+makepkg -si
+
+
+acpica
+bleachbit
+brightnessctl
+btop
+cliphist
+dunst
+ffmpeg
+file-roller
+foot
+gimp
+grim
+gvfs
+hyprcursor
+hyprland
+hyprlang
+hyprpaper
+kvantum
+nwg-look
+pavucontrol
+pipewire
+pipewire-alsa
+pipewire-pulse
+polkit-gnome
+polkit-kde-agent
+qt6ct
+qt6-wayland
+slurp
+swappy
+terminator
+thunar
+thunar-archive-plugin
+thunar-volman
+vlc
+waybar
+wf-recorder
+wireplumber
+wlroots
+
+
+---------------------
+PARU
+---------------------
+hyprpicker
+brave-bin
+librewolf-bin
+standardnotes-desktop
+network-manager-openvpn
+snapper-gui
+rofi-wayland
+visual-studio-code-bin
+wlogout
+snap-pac-grub
+
+audio.sh
+archives.sh 
+
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+Sudo reboot now
