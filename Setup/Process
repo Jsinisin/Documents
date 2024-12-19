@@ -192,6 +192,7 @@ waybar
 wf-recorder
 wireplumber
 wlroots
+xdg-desktop-portal-wlr
 
 
 ---------------------
@@ -202,6 +203,7 @@ brave-bin
 librewolf-bin
 standardnotes-bin
 network-manager-openvpn
+obs-studio
 snapper-gui
 rofi-wayland
 visual-studio-code-bin
