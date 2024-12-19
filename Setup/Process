@@ -156,7 +156,6 @@ brightnessctl
 btop
 cliphist
 dunst
-ffmpeg
 foot
 gimp
 grim
@@ -183,7 +182,6 @@ thunar
 thunar-volman
 vlc
 waybar
-wf-recorder
 wireplumber
 wlroots
 xdg-desktop-portal-wlr
