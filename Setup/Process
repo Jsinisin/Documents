@@ -66,7 +66,6 @@ tlp
 tlp-rdw
 ttf-font-awesome
 ttf-hack
-unzip
 wget
 zsh
 
@@ -82,7 +81,6 @@ grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 
 grub-mkconfig -o /boot/grub/grub.cfg
 
-systemctl enable bluetooth
 systemctl enable NetworkManager
 systemctl enable NetworkManager-dispatcher.service
 systemctl mask systemd-rfkill.service systemd-rfkill.socket
@@ -97,8 +95,6 @@ sudo shutdown now
 
 --------------------
 sudo nmcli device wifi connect [wifi ssid] password [wifi password]
-
-git clone https://github.com/jsinisin/bin
 
 zram.sh
 
@@ -161,7 +157,6 @@ btop
 cliphist
 dunst
 ffmpeg
-file-roller
 foot
 gimp
 grim
@@ -185,7 +180,6 @@ slurp
 swappy
 terminator
 thunar
-thunar-archive-plugin
 thunar-volman
 vlc
 waybar
@@ -204,6 +198,7 @@ librewolf-bin
 standardnotes-bin
 network-manager-openvpn
 obs-studio
+peazip
 snapper-gui
 rofi-wayland
 visual-studio-code-bin
