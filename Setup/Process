@@ -198,12 +198,13 @@ PARU
 hyprpicker
 brave-bin
 librewolf-bin
-standardnotes-desktop
+standardnotes-bin
 network-manager-openvpn
 snapper-gui
 rofi-wayland
 visual-studio-code-bin
 wlogout
+universal-android-debloater-bin
 snap-pac-grub
 
 audio.sh
